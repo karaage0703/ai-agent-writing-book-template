@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import glob
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -116,6 +117,16 @@ def require_command(command: str, install_hint: str) -> None:
         fail(f"{command} not found. {install_hint}")
 
 
+def require_pandoc() -> None:
+    require_command("pandoc", "Install Pandoc 3.9 or later.")
+    result = subprocess.run(
+        ["pandoc", "--version"], text=True, capture_output=True, check=True
+    )
+    match = re.search(r"pandoc\s+(\d+)\.(\d+)", result.stdout)
+    if not match or tuple(map(int, match.groups())) < (3, 9):
+        fail("Pandoc 3.9 or later is required")
+
+
 def run(command: list[str], label: str) -> None:
     result = subprocess.run(command, text=True, capture_output=True)
     if result.returncode != 0:
@@ -136,7 +147,7 @@ def build_pdf(
     output_dir: Path,
     cover: Path | None,
 ) -> Path:
-    require_command("pandoc", "Install Pandoc 3.x.")
+    require_pandoc()
     require_command("typst", "Install Typst 0.14 or later.")
 
     output = config.get("output", {})
@@ -176,7 +187,7 @@ def build_epub(
     output_dir: Path,
     cover: Path | None,
 ) -> Path:
-    require_command("pandoc", "Install Pandoc 3.x.")
+    require_pandoc()
 
     output = config.get("output", {})
     css = resolve_path(output.get("epub_css", "./templates/epub.css"), config_dir)

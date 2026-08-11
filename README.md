@@ -27,7 +27,7 @@ make book
 
 ## 必要なもの
 
-- Pandoc 3.x
+- Pandoc 3.9以上
 - Typst 0.14以上
 - uv
 - GNU Make
