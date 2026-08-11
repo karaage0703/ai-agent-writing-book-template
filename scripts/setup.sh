@@ -12,7 +12,7 @@ case "$(uname -s)" in
     ;;
   *)
     echo "未対応のOSです: $(uname -s)" >&2
-    echo "対応OS: macOS、WSL2上のUbuntu" >&2
+    echo "対応OS: macOS、Linux（Ubuntu）、WSL2（Ubuntu）" >&2
     exit 1
     ;;
 esac

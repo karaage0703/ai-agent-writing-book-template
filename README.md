@@ -2,8 +2,6 @@
 
 Markdown原稿から、JIS B5判PDFとEPUB 3を生成する技術書テンプレートです。人間とAIエージェントが同じリポジトリで執筆・レビュー・組版できるように、制作ルール、サンプル原稿、生成スクリプト、検査、CIをまとめています。
 
-現在は公開準備中のprivateリポジトリです。内容とライセンスを最終確認した後、公開する予定です。
-
 ## 最短の使い方
 
 GitHubの「Use this template」から新しいリポジトリを作るか、GitHub CLIを使います。
@@ -29,6 +27,7 @@ make book
 ## 対応環境
 
 - macOS（Intel / Apple Silicon、Homebrewを使用）
+- Linux（Ubuntu、x86_64 / ARM64）
 - Windows 11 + WSL2 + Ubuntu（x86_64 / ARM64）
 
 Windows側のPowerShellやコマンドプロンプトから直接ビルドする構成ではありません。リポジトリをWSL2のLinuxファイルシステム内へcloneし、Ubuntuのシェルで操作します。`/mnt/c/...`でも動作する場合はありますが、ファイルI/Oと権限の差を避けるため`~/src/...`のようなWSL2内の場所を推奨します。
@@ -42,7 +41,7 @@ Windows側のPowerShellやコマンドプロンプトから直接ビルドする
 - Noto Sans CJK JP
 - Poppler（`pdfinfo`と`pdftotext`）
 
-`make setup`がOSを判定し、必要なツールを導入します。macOSではHomebrew、WSL2 UbuntuではAPTと公式GitHub Releaseを使います。Ubuntu側では`sudo`のパスワード入力が必要になる場合があります。
+`make setup`がOSを判定し、必要なツールを導入します。macOSではHomebrew、LinuxとWSL2のUbuntuではAPTと公式GitHub Releaseを使います。Ubuntu側では`sudo`のパスワード入力が必要になる場合があります。
 
 ### macOS
 
@@ -54,6 +53,19 @@ make book
 ```
 
 Homebrewが未導入なら、先に<https://brew.sh/ja/>から導入します。セットアップではPandoc、Typst、uv、Poppler、Fontconfig、Noto Sans CJK JPをインストールします。
+
+### Linux（Ubuntu）
+
+リポジトリをcloneし、Ubuntuのシェルで実行します。
+
+```bash
+git clone https://github.com/OWNER/MY-BOOK.git
+cd MY-BOOK
+make setup
+make book
+```
+
+`make setup`の途中で、APTを実行するための`sudo`パスワードを求められる場合があります。
 
 ### Windows 11 + WSL2 Ubuntu
 
@@ -115,7 +127,7 @@ book:
 ## コマンド
 
 ```bash
-make setup   # macOS / WSL2 Ubuntuへ依存ツールを導入
+make setup   # macOS / Linux / WSL2へ依存ツールを導入
 make check   # ツールとフォントを確認
 make pdf     # PDFを生成
 make epub    # EPUBを生成

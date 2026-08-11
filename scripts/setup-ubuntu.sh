@@ -9,7 +9,7 @@ fi
 # shellcheck disable=SC1091
 source /etc/os-release
 if [[ "${ID:-}" != "ubuntu" ]]; then
-  echo "このスクリプトの対象はWSL2上のUbuntuです: ID=${ID:-unknown}" >&2
+  echo "このスクリプトの対象はLinuxまたはWSL2上のUbuntuです: ID=${ID:-unknown}" >&2
   exit 1
 fi
 
@@ -66,4 +66,4 @@ curl -fL --retry 3 \
 tar -xzf "$setup_tmp_dir/$uv_archive" -C "$setup_tmp_dir"
 sudo install -m 0755 "$setup_tmp_dir/uv-${uv_target}/uv" /usr/local/bin/uv
 
-echo "WSL2 Ubuntuのセットアップが完了しました"
+echo "Ubuntuのセットアップが完了しました"
