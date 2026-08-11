@@ -1,6 +1,9 @@
 SHELL := /bin/bash
 
-.PHONY: check book pdf epub verify clean
+.PHONY: setup check book pdf epub verify clean
+
+setup:
+	bash scripts/setup.sh
 
 check:
 	@command -v uv >/dev/null && uv --version || { echo "uv が見つかりません"; exit 1; }

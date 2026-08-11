@@ -16,14 +16,22 @@ gh repo create my-book \
 cd my-book
 ```
 
-次に、環境を確認してサンプル本を生成します。
+次に、環境をセットアップしてサンプル本を生成します。
 
 ```bash
+make setup
 make check
 make book
 ```
 
 生成物は`output/sample_book.pdf`と`output/sample_book.epub`です。
+
+## 対応環境
+
+- macOS（Intel / Apple Silicon、Homebrewを使用）
+- Windows 11 + WSL2 + Ubuntu（x86_64 / ARM64）
+
+Windows側のPowerShellやコマンドプロンプトから直接ビルドする構成ではありません。リポジトリをWSL2のLinuxファイルシステム内へcloneし、Ubuntuのシェルで操作します。`/mnt/c/...`でも動作する場合はありますが、ファイルI/Oと権限の差を避けるため`~/src/...`のようなWSL2内の場所を推奨します。
 
 ## 必要なもの
 
@@ -34,12 +42,39 @@ make book
 - Noto Sans CJK JP
 - Poppler（`pdfinfo`と`pdftotext`）
 
-Ubuntu系では、Pandoc、フォント、Make、Popplerを次のように導入できます。Typstとuvは各公式手順を使ってください。
+`make setup`がOSを判定し、必要なツールを導入します。macOSではHomebrew、WSL2 UbuntuではAPTと公式GitHub Releaseを使います。Ubuntu側では`sudo`のパスワード入力が必要になる場合があります。
+
+### macOS
 
 ```bash
-sudo apt-get update
-sudo apt-get install -y pandoc fonts-noto-cjk make poppler-utils
+git clone https://github.com/OWNER/MY-BOOK.git
+cd MY-BOOK
+make setup
+make book
 ```
+
+Homebrewが未導入なら、先に<https://brew.sh/ja/>から導入します。セットアップではPandoc、Typst、uv、Poppler、Fontconfig、Noto Sans CJK JPをインストールします。
+
+### Windows 11 + WSL2 Ubuntu
+
+PowerShellでWSL2とUbuntuを用意します。再起動を求められた場合は従います。
+
+```powershell
+wsl --install -d Ubuntu
+```
+
+Ubuntuを起動し、Linux側で実行します。
+
+```bash
+mkdir -p ~/src
+cd ~/src
+git clone https://github.com/OWNER/MY-BOOK.git
+cd MY-BOOK
+make setup
+make book
+```
+
+`make setup`はPandoc 3.10.1、Typst 0.14.2、uv 0.12.3と、日本語フォント・PDF検査ツールを導入します。
 
 ## 自分の本へ変える
 
@@ -80,6 +115,7 @@ book:
 ## コマンド
 
 ```bash
+make setup   # macOS / WSL2 Ubuntuへ依存ツールを導入
 make check   # ツールとフォントを確認
 make pdf     # PDFを生成
 make epub    # EPUBを生成
