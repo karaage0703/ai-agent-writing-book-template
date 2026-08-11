@@ -1,0 +1,25 @@
+book:
+  title: "AIエージェントとつくるサンプル本"
+  subtitle: "MarkdownからPDFとEPUBを生成する"
+  author: "著者名"
+  publisher: "レーベル名"
+  language: "ja"
+  description: "AIエージェントと共同制作する技術書のサンプル"
+  date: "2026年"
+  version: "0.1.0"
+  cover_image: ""
+
+source:
+  input_dir: "./chapters"
+  file_pattern: "*.md"
+  sort_by: "filename"
+  custom_order: []
+
+output:
+  format:
+    - "pdf"
+    - "epub"
+  output_dir: "./output"
+  filename: "sample_book"
+  pdf_template: "./templates/pandoc-typst.typ"
+  epub_css: "./templates/epub.css"

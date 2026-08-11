@@ -1,0 +1,12 @@
+.env
+.env.*
+!.env.example
+.venv/
+__pycache__/
+.DS_Store
+materials/private/
+sales/private/
+*.key
+*.pem
+output/*
+!output/.gitkeep

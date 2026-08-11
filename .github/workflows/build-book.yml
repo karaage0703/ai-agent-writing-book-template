@@ -1,0 +1,38 @@
+name: build-book
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: book-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v9
+      - uses: typst-community/setup-typst@v5
+        with:
+          typst-version: 0.14.2
+      - name: Install Pandoc, fonts and PDF tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pandoc fonts-noto-cjk make poppler-utils
+      - name: Build and verify
+        run: make check book
+      - uses: actions/upload-artifact@v4
+        with:
+          name: book-preview
+          path: |
+            output/*.pdf
+            output/*.epub
+          retention-days: 3
