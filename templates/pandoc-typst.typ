@@ -1,5 +1,12 @@
 // Pandoc custom template for a Japanese JIS B5 technical book.
 
+#let blockquote(body) = block(
+  width: 100%,
+  inset: (left: 12pt, y: 6pt),
+  stroke: (left: 2pt + luma(180)),
+  text(fill: luma(80), body),
+)
+
 #let book(
   title: [],
   subtitle: [],
