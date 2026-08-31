@@ -1,0 +1,11 @@
+{
+  "steps": [
+    {"id": "s1", "label": "材料", "type": "start"},
+    {"id": "s2", "label": "原稿", "type": "process"},
+    {"id": "s3", "label": "PDFとEPUB", "type": "end"}
+  ],
+  "connections": [
+    {"from": "s1", "to": "s2"},
+    {"from": "s2", "to": "s3"}
+  ]
+}
