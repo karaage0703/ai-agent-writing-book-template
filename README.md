@@ -2,7 +2,36 @@
 
 Markdown原稿から、JIS B5判PDFとEPUB 3を生成する技術書テンプレートです。人間とAIエージェントが同じリポジトリで執筆・レビュー・組版できるように、制作ルール、サンプル原稿、生成スクリプト、検査、CIをまとめています。
 
-## 最短の使い方
+## AIエージェントへ頼む
+
+CodexやClaude Codeなど、ローカルのファイルを読み書きし、コマンドを実行できるAIエージェントへ次のプロンプトを渡します。
+
+```text
+このリポジトリのREADME.mdとAGENTS.mdを先に読んでください。
+現在のOSに合う方法で執筆環境をセットアップし、サンプルのPDFとEPUBを生成して検査してください。
+途中で管理者権限や外部への公開が必要になった場合は、実行前に確認してください。
+最後に、生成したファイルの場所、実行した検査、残っている問題を報告してください。
+```
+
+テンプレートには、AIエージェントが必要なときに参照できる汎用的な執筆用スキルも含まれています。
+
+- `book-setup`: OSに合うセットアップとサンプル生成
+- `book-ideas`: 経験、材料、対象読者から本のテーマ候補を整理
+- `book-interview`: 著者へ一問ずつ質問し、具体的な経験を原稿材料として保存
+- `book-materials`: 手元の資料を探し、出典と不足情報を整理
+- `book-transcribe`: `transcriber_tool`の実コマンドで音声を文字起こしし、原音と照合
+- `book-draft`: 材料と章の目的からMarkdown原稿を作成
+- `book-review`: 原稿の根拠、重複、表記、伝わり方をレビュー
+- `book-visualize`: 内容に合う図を選び、再編集可能な元データと画像を保存
+- `book-build`: PDF・EPUBの生成と検査
+- `book-cover`: 文字なし背景の生成、書名・著者名の合成、縮小確認
+- `book-publish`: 販売セット、紹介文、サンプル、公開前チェックリストを準備
+- `book-feedback`: 販売後の感想、告知、改訂候補を整理
+- `book-revise`: 改訂候補から影響範囲を調べ、原稿修正、再組版、更新履歴まで実行
+
+これらは完成品ではなく、最初の一冊を始めるためのひな型です。すべてを使う必要はありません。材料の置き場所、利用できる道具、公開形式、確認したい品質は人によって異なるため、実際の作業で得た例、失敗、確認項目、スクリプトを加えて育ててください。詳しくは[`skills/README.md`](skills/README.md)を参照してください。
+
+## 自分でコマンドを実行する
 
 GitHubの「Use this template」から新しいリポジトリを作るか、GitHub CLIを使います。
 
@@ -108,12 +137,29 @@ book:
 ```text
 .
 ├── AGENTS.md
+├── CLAUDE.md -> AGENTS.md
 ├── README.md
 ├── book_config.yaml
 ├── chapters/
 ├── assets/
 ├── templates/
 ├── scripts/
+├── skills/
+│   ├── book-setup/
+│   ├── book-ideas/
+│   ├── book-interview/
+│   ├── book-materials/
+│   ├── book-transcribe/
+│   ├── book-draft/
+│   ├── book-build/
+│   ├── book-review/
+│   ├── book-visualize/
+│   ├── book-cover/
+│   ├── book-publish/
+│   ├── book-feedback/
+│   └── book-revise/
+├── .agents/skills -> ../skills
+├── .claude/skills -> ../skills
 ├── output/
 └── .github/workflows/build-book.yml
 ```
@@ -122,6 +168,9 @@ book:
 - `assets/`: 表紙、図、写真
 - `templates/`: PDF用TypstテンプレートとEPUB用CSS
 - `scripts/`: 生成と機械検査
+- `skills/`: AIエージェントが再利用できるセットアップ、組版、レビュー手順
+- `.agents/skills`: Codexが参照する`skills/`へのシンボリックリンク
+- `.claude/skills`: Claude Codeが参照する`skills/`へのシンボリックリンク
 - `output/`: 生成物。Gitには入れず、CI ArtifactやReleaseで保管
 
 ## コマンド
@@ -137,6 +186,22 @@ make clean   # output内の生成物を削除
 ```
 
 Pull RequestではGitHub Actionsが`make book`を実行し、PDFとEPUBを確認用Artifactとして保存します。公開や販売ページへのアップロードは自動化していません。
+
+## 出版と改訂をAIエージェントへ頼む
+
+販売準備は次の一文から始められます。
+
+```text
+book-publishスキルを使って、この本の販売準備をしてください。
+```
+
+公開後に直したい点が集まったら、次のように頼みます。
+
+```text
+book-reviseスキルを使って、集めた改訂候補を確認し、この本を改訂してください。
+```
+
+AIエージェントは販売ファイルや原稿をリポジトリ内で準備し、実行した検査と未確認事項を報告します。価格決定、販売ページの公開、販売中ファイルの差し替えなど、外部の状態を変える操作は人間の確認後に行います。
 
 ## AIエージェントへ依頼する例
 
